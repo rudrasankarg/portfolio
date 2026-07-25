@@ -6,6 +6,17 @@ function Contact() {
     email: '',
     message: ''
   });
+  
+  // Custom Math Captcha
+  const generateCaptcha = () => {
+    const num1 = Math.floor(Math.random() * 8) + 2; // numbers from 2 to 9
+    const num2 = Math.floor(Math.random() * 8) + 2;
+    return { num1, num2, answer: num1 + num2 };
+  };
+
+  const [captcha, setCaptcha] = useState(() => generateCaptcha());
+  const [captchaInput, setCaptchaInput] = useState('');
+
   const [status, setStatus] = useState({
     submitting: false,
     success: false,
@@ -21,6 +32,15 @@ function Contact() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Verify Captcha
+    if (parseInt(captchaInput) !== captcha.answer) {
+      setStatus({ submitting: false, success: false, error: 'Incorrect answer. Please solve the math verification to send message.' });
+      setCaptcha(generateCaptcha());
+      setCaptchaInput('');
+      return;
+    }
+
     setStatus({ submitting: true, success: false, error: null });
 
     fetch('/api/contact', {
@@ -36,6 +56,8 @@ function Contact() {
         
         setStatus({ submitting: false, success: true, error: null });
         setFormData({ name: '', email: '', message: '' });
+        setCaptchaInput('');
+        setCaptcha(generateCaptcha());
 
         setTimeout(() => {
           setStatus(prev => ({ ...prev, success: false }));
@@ -43,6 +65,8 @@ function Contact() {
       })
       .catch((err) => {
         setStatus({ submitting: false, success: false, error: err.message });
+        setCaptcha(generateCaptcha());
+        setCaptchaInput('');
       });
   };
 
@@ -65,27 +89,25 @@ function Contact() {
             </div>
           </div>
 
-          <div class="contact-method">
-            <div class="contact-icon"><i class="bi bi-geo-alt"></i></div>
-            <div class="contact-details">
+          <div className="contact-method">
+            <div className="contact-icon"><i className="bi bi-geo-alt"></i></div>
+            <div className="contact-details">
               <h4>Location</h4>
               <p>Kolkata, West Bengal, India</p>
             </div>
           </div>
 
-
-
-          <div class="contact-method">
-            <div class="contact-icon"><i class="bi bi-linkedin"></i></div>
-            <div class="contact-details">
+          <div className="contact-method">
+            <div className="contact-icon"><i className="bi bi-linkedin"></i></div>
+            <div className="contact-details">
               <h4>LinkedIn</h4>
               <p><a href="https://www.linkedin.com/in/rudrasgd" target="_blank" rel="noopener noreferrer">Rudra Sankar Ghosh Dastidar</a></p>
             </div>
           </div>
 
-          <div class="contact-method">
-            <div class="contact-icon"><i class="bi bi-github"></i></div>
-            <div class="contact-details">
+          <div className="contact-method">
+            <div className="contact-icon"><i className="bi bi-github"></i></div>
+            <div className="contact-details">
               <h4>GitHub</h4>
               <p><a href="https://github.com/rudrasankarg" target="_blank" rel="noopener noreferrer">github.com/rudrasankarg</a></p>
             </div>
@@ -138,6 +160,23 @@ function Contact() {
               />
             </div>
 
+            {/* Math Security Captcha */}
+            <div className="form-group">
+              <label htmlFor="captcha" className="form-label">
+                Security Check: Solve {captcha.num1} + {captcha.num2} = ?
+              </label>
+              <input 
+                type="number" 
+                id="captcha" 
+                name="captcha" 
+                value={captchaInput}
+                onChange={(e) => setCaptchaInput(e.target.value)}
+                className="form-input" 
+                placeholder="Your Answer" 
+                required 
+              />
+            </div>
+
             <button 
               type="submit" 
               className="btn-submit"
@@ -149,7 +188,7 @@ function Contact() {
 
             {status.error && (
               <p style={{ color: '#ff6b6b', fontSize: '0.85rem', marginTop: '1rem', textAlign: 'center' }}>
-                Error: {status.error}
+                {status.error}
               </p>
             )}
           </form>
