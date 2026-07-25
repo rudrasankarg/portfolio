@@ -55,7 +55,6 @@ const seedProjects = [
     ],
     techStack: ["Arduino", "Python", "MATLAB", "React", "TFLite", "Express.js"],
     liveUrl: "https://drive.google.com/file/d/1ZQLLqvIugWzZLVaY16ZUDjCt7QS5AyzN/view"
-  },
   }
 ];
 

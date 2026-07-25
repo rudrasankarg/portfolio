@@ -79,7 +79,7 @@ function Contact() {
             <div class="contact-icon"><i class="bi bi-linkedin"></i></div>
             <div class="contact-details">
               <h4>LinkedIn</h4>
-              <p><a href="https://www.linkedin.com/in/rudra-sankar-ghosh-dastidar-5a0263326/" target="_blank" rel="noopener noreferrer">Rudra Sankar Ghosh Dastidar</a></p>
+              <p><a href="https://www.linkedin.com/in/rudrasgd" target="_blank" rel="noopener noreferrer">Rudra Sankar Ghosh Dastidar</a></p>
             </div>
           </div>
 
