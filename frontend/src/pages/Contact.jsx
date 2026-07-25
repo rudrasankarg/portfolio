@@ -4,18 +4,14 @@ function Contact() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    message: ''
+    message: '',
+    otp: ''
   });
   
-  // Custom Math Captcha
-  const generateCaptcha = () => {
-    const num1 = Math.floor(Math.random() * 8) + 2; // numbers from 2 to 9
-    const num2 = Math.floor(Math.random() * 8) + 2;
-    return { num1, num2, answer: num1 + num2 };
-  };
-
-  const [captcha, setCaptcha] = useState(() => generateCaptcha());
-  const [captchaInput, setCaptchaInput] = useState('');
+  // OTP UI states
+  const [otpRequested, setOtpRequested] = useState(false);
+  const [otpSending, setOtpSending] = useState(false);
+  const [demoCode, setDemoCode] = useState('');
 
   const [status, setStatus] = useState({
     submitting: false,
@@ -30,6 +26,49 @@ function Contact() {
     });
   };
 
+  // Request OTP from server
+  const handleRequestOtp = (e) => {
+    e.preventDefault();
+    if (!formData.email) {
+      setStatus({ submitting: false, success: false, error: 'Please enter your email address first.' });
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setStatus({ submitting: false, success: false, error: 'Please enter a valid email address.' });
+      return;
+    }
+
+    setOtpSending(true);
+    setStatus({ submitting: false, success: false, error: null });
+    setDemoCode('');
+
+    fetch('/api/contact/send-otp', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email: formData.email })
+    })
+      .then(async (res) => {
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Failed to request OTP');
+        
+        setOtpSending(false);
+        setOtpRequested(true);
+        setStatus({ submitting: false, success: false, error: null });
+        
+        if (data.demo && data.code) {
+          setDemoCode(data.code);
+        }
+      })
+      .catch((err) => {
+        setOtpSending(false);
+        setStatus({ submitting: false, success: false, error: err.message });
+      });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -40,11 +79,9 @@ function Contact() {
       return;
     }
 
-    // Verify Captcha
-    if (parseInt(captchaInput) !== captcha.answer) {
-      setStatus({ submitting: false, success: false, error: 'Incorrect answer. Please solve the math verification to send message.' });
-      setCaptcha(generateCaptcha());
-      setCaptchaInput('');
+    // Verify OTP input exists
+    if (!formData.otp) {
+      setStatus({ submitting: false, success: false, error: 'Please enter the verification OTP sent to your email.' });
       return;
     }
 
@@ -62,9 +99,9 @@ function Contact() {
         if (!res.ok) throw new Error(data.message || 'Failed to submit form');
         
         setStatus({ submitting: false, success: true, error: null });
-        setFormData({ name: '', email: '', message: '' });
-        setCaptchaInput('');
-        setCaptcha(generateCaptcha());
+        setFormData({ name: '', email: '', message: '', otp: '' });
+        setOtpRequested(false);
+        setDemoCode('');
 
         setTimeout(() => {
           setStatus(prev => ({ ...prev, success: false }));
@@ -72,8 +109,6 @@ function Contact() {
       })
       .catch((err) => {
         setStatus({ submitting: false, success: false, error: err.message });
-        setCaptcha(generateCaptcha());
-        setCaptchaInput('');
       });
   };
 
@@ -135,21 +170,43 @@ function Contact() {
                 className="form-input" 
                 placeholder="Your Name" 
                 required 
+                disabled={otpRequested}
               />
             </div>
 
+            {/* Email Field with Send OTP Button */}
             <div className="form-group">
               <label htmlFor="email" className="form-label">Email Address</label>
-              <input 
-                type="email" 
-                id="email" 
-                name="email" 
-                value={formData.email}
-                onChange={handleChange}
-                className="form-input" 
-                placeholder="email@example.com" 
-                required 
-              />
+              <div style={{ display: 'flex', gap: '0.8rem' }}>
+                <input 
+                  type="email" 
+                  id="email" 
+                  name="email" 
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="form-input" 
+                  placeholder="email@example.com" 
+                  required 
+                  disabled={otpRequested}
+                  style={{ flexGrow: 1 }}
+                />
+                {!otpRequested && (
+                  <button 
+                    onClick={handleRequestOtp} 
+                    className="btn-secondary" 
+                    disabled={otpSending}
+                    style={{ 
+                      padding: '0 1.5rem', 
+                      fontSize: '0.85rem', 
+                      whiteSpace: 'nowrap', 
+                      borderRadius: '8px',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    {otpSending ? 'Sending...' : 'Get OTP'}
+                  </button>
+                )}
+              </div>
             </div>
 
             <div className="form-group">
@@ -160,37 +217,64 @@ function Contact() {
                 value={formData.message}
                 onChange={handleChange}
                 className="form-input" 
-                rows="5" 
+                rows="4" 
                 placeholder="How can I help you?" 
                 style={{ resize: 'none' }} 
                 required 
+                disabled={otpRequested}
               />
             </div>
 
-            {/* Math Security Captcha */}
-            <div className="form-group">
-              <label htmlFor="captcha" className="form-label">
-                Security Check: Solve {captcha.num1} + {captcha.num2} = ?
-              </label>
-              <input 
-                type="number" 
-                id="captcha" 
-                name="captcha" 
-                value={captchaInput}
-                onChange={(e) => setCaptchaInput(e.target.value)}
-                className="form-input" 
-                placeholder="Your Answer" 
-                required 
-              />
-            </div>
+            {/* OTP Verification Code Input */}
+            {otpRequested && (
+              <div className="form-group fade-in">
+                <label htmlFor="otp" className="form-label" style={{ color: 'var(--color-primary)' }}>
+                  Verification Code (OTP)
+                </label>
+                <input 
+                  type="text" 
+                  id="otp" 
+                  name="otp" 
+                  value={formData.otp}
+                  onChange={handleChange}
+                  className="form-input" 
+                  placeholder="Enter 6-digit code" 
+                  maxLength={6}
+                  required 
+                  style={{ borderColor: 'var(--color-primary)' }}
+                />
+                
+                {demoCode && (
+                  <p style={{ color: 'var(--color-primary)', fontSize: '0.8rem', marginTop: '0.5rem' }}>
+                    <strong>[Demo Mode]</strong> Check server logs or use code: <strong>{demoCode}</strong>
+                  </p>
+                )}
+                
+                <button 
+                  onClick={() => setOtpRequested(false)} 
+                  style={{ 
+                    background: 'none', 
+                    border: 'none', 
+                    color: 'var(--text-muted)', 
+                    fontSize: '0.8rem', 
+                    textDecoration: 'underline', 
+                    marginTop: '0.5rem',
+                    textAlign: 'left',
+                    cursor: 'pointer' 
+                  }}
+                >
+                  Edit contact details
+                </button>
+              </div>
+            )}
 
             <button 
               type="submit" 
               className="btn-submit"
-              disabled={status.submitting}
+              disabled={status.submitting || !otpRequested}
               style={status.success ? { background: 'linear-gradient(135deg, #00C9FF, #92FE9D)' } : {}}
             >
-              {status.submitting ? 'Sending...' : status.success ? 'Message Sent Successfully!' : 'Send Message'}
+              {status.submitting ? 'Verifying...' : status.success ? 'Message Sent Successfully!' : 'Send Message'}
             </button>
 
             {status.error && (
