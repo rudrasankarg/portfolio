@@ -33,6 +33,13 @@ function Contact() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // Verify Email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setStatus({ submitting: false, success: false, error: 'Please enter a valid email address.' });
+      return;
+    }
+
     // Verify Captcha
     if (parseInt(captchaInput) !== captcha.answer) {
       setStatus({ submitting: false, success: false, error: 'Incorrect answer. Please solve the math verification to send message.' });
