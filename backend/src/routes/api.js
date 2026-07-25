@@ -3,12 +3,12 @@ const router = express.Router();
 const Project = require('../models/Project');
 const Contact = require('../models/Contact');
 
-// Seed projects list based on Rudra's resume
+// Seed projects list based on Rudra's resume and provided links
 const seedProjects = [
   {
     title: "LifeOnLine – AI Emergency Healthcare",
     category: "fullstack",
-    description: "An AI-powered emergency healthcare portal delivering rapid medical assistance and patient triaging.",
+    description: "An AI-powered emergency healthcare platform integrating SOS alerts, real-time location tracking, symptom analysis, and secure video consultation.",
     year: "2026",
     bulletPoints: [
       "Integrated SOS alerts, GPS tracking, and secure WebRTC video consultation.",
@@ -16,7 +16,8 @@ const seedProjects = [
       "Includes Finance Guard to warn users against predatory emergency medical loans."
     ],
     techStack: ["React Native", "Next.js", "Express.js", "Gemini AI", "WebRTC", "Firebase"],
-    githubUrl: "https://github.com/rudrasankarg"
+    githubUrl: "https://github.com/rudrasankarg/Lifeonline-Production",
+    liveUrl: "https://lifeonline-web.vercel.app/login"
   },
   {
     title: "HackForge – Hackathon Platform",
@@ -29,7 +30,8 @@ const seedProjects = [
       "Responsive glassmorphic UI built in React & tailwind CSS, deployed on Render."
     ],
     techStack: ["React", "Node.js", "MongoDB", "Gemini AI", "JWT", "Tailwind CSS"],
-    githubUrl: "https://github.com/rudrasankarg"
+    githubUrl: "https://github.com/rudrasankarg/HackForge",
+    liveUrl: "https://hackforge-4s9q.onrender.com/"
   },
   {
     title: "NexaBank – Banking Web Application",
@@ -41,12 +43,13 @@ const seedProjects = [
       "Deployed the architecture on Vercel with smooth interactive transaction UI."
     ],
     techStack: ["Next.js", "TypeScript", "JavaScript", "CSS", "Vercel"],
-    githubUrl: "https://github.com/rudrasankarg"
+    githubUrl: "https://github.com/rudrasankarg/nexabank-complete",
+    liveUrl: "https://nexabank-complete.vercel.app/"
   },
   {
-    title: "Heart Abnormality Detection System",
+    title: "HeartGuard – Heart Abnormality Detection",
     category: "ai-iot",
-    description: "A portable low-cost ECG monitoring setup transmitting diagnostic parameters over Bluetooth/Wi-Fi.",
+    description: "A portable low-cost ECG monitoring setup transmitting diagnostic parameters over Bluetooth/Wi-Fi and classifying waveforms.",
     year: "2025",
     bulletPoints: [
       "Designed ECG acquisition circuits using Arduino UNO and AD8232 heart sensor.",
@@ -54,7 +57,8 @@ const seedProjects = [
       "Published detailed findings in STAPS Journal."
     ],
     techStack: ["Arduino", "Python", "MATLAB", "React", "TFLite", "Express.js"],
-    liveUrl: "https://drive.google.com/file/d/1ZQLLqvIugWzZLVaY16ZUDjCt7QS5AyzN/view"
+    githubUrl: "https://github.com/rudrasankarg/Heart-Abnormality-Detector",
+    liveUrl: "https://heart-guard-ecs.vercel.app/"
   }
 ];
 
@@ -65,13 +69,31 @@ router.get('/projects', async (req, res) => {
       console.log('MongoDB offline. Serving projects from local seed memory.');
       return res.json(seedProjects);
     }
+    
     let projects = await Project.find();
     
-    // Prune legacy clone projects from database if they exist
+    // Prune legacy clone projects if they exist
     if (projects.some(p => p.category === 'clones')) {
       console.log('Legacy clones detected in database. Pruning...');
       await Project.deleteMany({ category: 'clones' });
       projects = await Project.find();
+    }
+    
+    // Sync URL updates if MongoDB has outdated/missing project URLs
+    if (projects.length > 0) {
+      const needsSync = projects.some(p => {
+        if (p.title.includes("LifeOnLine") && (!p.liveUrl || p.githubUrl.includes("rudrasankarg$"))) return true;
+        if (p.title.includes("HackForge") && !p.liveUrl) return true;
+        if (p.title.includes("NexaBank") && !p.liveUrl) return true;
+        if (p.title.includes("Heart") && p.liveUrl !== "https://heart-guard-ecs.vercel.app/") return true;
+        return false;
+      });
+      
+      if (needsSync) {
+        console.log('Database project URLs out of sync. Syncing with new links...');
+        await Project.deleteMany({});
+        projects = [];
+      }
     }
     
     if (projects.length === 0) {
@@ -92,10 +114,6 @@ router.post('/contact', async (req, res) => {
     const { name, email, message } = req.body;
     if (!name || !email || !message) {
       return res.status(400).json({ message: 'All fields are required' });
-    }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return res.status(400).json({ message: 'Please enter a valid email address.' });
     }
     if (!req.isMongoConnected) {
       console.log('MongoDB offline. Message received in memory:', { name, email, message });
