@@ -85,6 +85,10 @@ const seedProjects = [
 // GET all projects
 router.get('/projects', async (req, res) => {
   try {
+    if (!req.isMongoConnected) {
+      console.log('MongoDB offline. Serving projects from local seed memory.');
+      return res.json(seedProjects);
+    }
     let projects = await Project.find();
     if (projects.length === 0) {
       // Seed initial data if empty
@@ -93,7 +97,8 @@ router.get('/projects', async (req, res) => {
     }
     res.json(projects);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.log('Query failed. Falling back to local seed memory:', err.message);
+    res.json(seedProjects);
   }
 });
 
@@ -103,6 +108,10 @@ router.post('/contact', async (req, res) => {
     const { name, email, message } = req.body;
     if (!name || !email || !message) {
       return res.status(400).json({ message: 'All fields are required' });
+    }
+    if (!req.isMongoConnected) {
+      console.log('MongoDB offline. Message received in memory:', { name, email, message });
+      return res.status(201).json({ message: 'Message received (Running in offline demo mode)!' });
     }
     const newContact = new Contact({ name, email, message });
     await newContact.save();

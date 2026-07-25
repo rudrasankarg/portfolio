@@ -423,6 +423,10 @@ main {
 }
 
 /* Page Section Templates */
+section:not(.hero-section) {
+  padding: 8rem 0;
+}
+
 .section-header {
   margin-bottom: 4rem;
   max-width: 800px;

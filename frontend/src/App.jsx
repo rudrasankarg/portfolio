@@ -147,7 +147,7 @@ function MainLayout() {
       {/* Header Navigation */}
       <header className={scrolled ? 'scrolled' : ''}>
         <a href="#home" onClick={(e) => { e.preventDefault(); scrollToSection('home'); }} className="logo">
-          <span>RUDRA</span>_SANKAR
+          <span>RUDRA</span> SANKAR
         </a>
         
         <button 
