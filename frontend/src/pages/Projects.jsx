@@ -14,8 +14,9 @@ function Projects() {
         return res.json();
       })
       .then(data => {
-        setProjects(data);
-        setFilteredProjects(data);
+        const activeProjects = data.filter(p => p.category !== 'clones');
+        setProjects(activeProjects);
+        setFilteredProjects(activeProjects);
         setLoading(false);
       })
       .catch(err => {
