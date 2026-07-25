@@ -127,89 +127,19 @@ router.get('/projects', async (req, res) => {
   }
 });
 
-// POST send OTP code to email
-router.post('/contact/send-otp', async (req, res) => {
-  try {
-    const { email } = req.body;
-    if (!email) {
-      return res.status(400).json({ message: 'Email address is required' });
-    }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return res.status(400).json({ message: 'Please enter a valid email address.' });
-    }
-
-    // Generate random 6-digit OTP
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    tempOTPs[email] = {
-      otp,
-      expiresAt: Date.now() + 5 * 60 * 1000 // 5 minutes expiration
-    };
-
-    const transporter = getMailTransporter();
-    if (!transporter) {
-      // Offline fallback: log to backend console
-      console.log(`[DEMO MODE] OTP for ${email}: ${otp}`);
-      return res.status(200).json({ 
-        message: 'OTP verification code generated!', 
-        demo: true,
-        code: otp // Return the code in response only during demo mode to help testing
-      });
-    }
-
-    const mailOptions = {
-      from: '"No-Reply Verification" <' + process.env.EMAIL_USER + '>',
-      to: email,
-      subject: 'Portfolio Verification Code',
-      html: `
-        <div style="font-family: sans-serif; padding: 20px; background-color: #0c0e14; color: #f8f9fa; border-radius: 10px; max-width: 500px;">
-          <h2 style="color: #00f2fe; border-bottom: 1px solid #1f2833; padding-bottom: 10px;">Verification Code</h2>
-          <p>You requested a message verification code for Rudra Sankar's Portfolio website.</p>
-          <div style="background: rgba(0,242,254,0.1); border: 1px solid #00f2fe; padding: 15px; text-align: center; border-radius: 8px; margin: 20px 0;">
-            <span style="font-size: 24px; font-weight: 800; letter-spacing: 4px; color: #00f2fe;">${otp}</span>
-          </div>
-          <p style="color: #94a3b8; font-size: 12px;">This code is valid for 5 minutes. If you did not request this, please ignore this email.</p>
-        </div>
-      `
-    };
-
-    await transporter.sendMail(mailOptions);
-    res.status(200).json({ message: 'Verification OTP sent to your email address!' });
-  } catch (err) {
-    console.error('Nodemailer OTP Error:', err);
-    res.status(500).json({ message: 'Failed to deliver OTP: ' + err.message });
-  }
-});
-
-// POST verify OTP and save/forward contact message
+// POST save and forward contact message
 router.post('/contact', async (req, res) => {
   try {
-    const { name, email, message, otp } = req.body;
+    const { name, email, message } = req.body;
     
-    if (!name || !email || !message || !otp) {
-      return res.status(400).json({ message: 'All fields including the OTP code are required.' });
+    if (!name || !email || !message) {
+      return res.status(400).json({ message: 'All fields are required.' });
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return res.status(400).json({ message: 'Please enter a valid email address.' });
     }
-
-    // Verify OTP Code
-    const storedRecord = tempOTPs[email];
-    if (!storedRecord) {
-      return res.status(400).json({ message: 'No OTP record found. Please send a new code.' });
-    }
-    if (storedRecord.expiresAt < Date.now()) {
-      delete tempOTPs[email];
-      return res.status(400).json({ message: 'OTP code has expired. Please request a new one.' });
-    }
-    if (storedRecord.otp !== otp.trim()) {
-      return res.status(400).json({ message: 'Incorrect OTP code. Please check your inbox and try again.' });
-    }
-
-    // OTP Verified successfully, clear it
-    delete tempOTPs[email];
 
     // Save to Database (if mongo is connected)
     if (req.isMongoConnected) {
@@ -244,7 +174,7 @@ router.post('/contact', async (req, res) => {
       console.log('[DEMO MODE] Forwarding message to rudrasankarg@gmail.com skipped (No App Password).');
     }
 
-    res.status(201).json({ message: 'Verification successful! Message sent.' });
+    res.status(201).json({ message: 'Message sent successfully!' });
   } catch (err) {
     console.error('Submit Contact Error:', err);
     res.status(500).json({ message: err.message });
