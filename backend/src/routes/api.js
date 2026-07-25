@@ -93,6 +93,10 @@ router.post('/contact', async (req, res) => {
     if (!name || !email || !message) {
       return res.status(400).json({ message: 'All fields are required' });
     }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ message: 'Please enter a valid email address.' });
+    }
     if (!req.isMongoConnected) {
       console.log('MongoDB offline. Message received in memory:', { name, email, message });
       return res.status(201).json({ message: 'Message received (Running in offline demo mode)!' });
