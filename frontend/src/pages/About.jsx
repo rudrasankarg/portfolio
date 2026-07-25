@@ -14,7 +14,7 @@ function About() {
         <div>
           <div className="bio-text">
             <p style={{ marginBottom: '1.5rem' }}>
-              I am a second-year Computer Science and Engineering undergraduate student at VIT-AP University. 
+              I am a third-year Computer Science and Engineering undergraduate student at VIT-AP University. 
               My interests lie at the intersection of software engineering, web application architecture, and 
               applied computing research.
             </p>
@@ -110,10 +110,11 @@ function About() {
           <h3 style={{ marginBottom: '2rem', fontFamily: 'var(--font-title)', fontWeight: 700, textAlign: 'center' }}>Beyond the Code</h3>
           <div className="hobbies-grid">
             <div className="glass-card">
-              <div style={{ fontSize: '2.2rem', color: 'var(--color-primary)', marginBottom: '1rem', display: 'flex', alignItems: 'center' }}>
-                <svg width="32" height="32" fill="currentColor" viewBox="0 0 16 16">
-                  <path d="M6 13c0 1.105-1.12 2-2.5 2S1 14.105 1 13s1.12-2 2.5-2 2.5.895 2.5 2m9-2c0 1.105-1.12 2-2.5 2s-2.5-.895-2.5-2 1.12-2 2.5-2 2.5.895 2.5 2"/>
-                  <path fillRule="evenodd" d="M14 11V2h1v9zM6 3l9-2v1l-9 2z"/>
+              <div style={{ fontSize: '2rem', color: 'var(--color-primary)', marginBottom: '1rem', display: 'flex', alignItems: 'center' }}>
+                <svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M9 13c0 1.105-1.12 2-2.5 2S4 14.105 4 13s1.12-2 2.5-2 2.5.895 2.5 2"/>
+                  <path fillRule="evenodd" d="M9 3v10H8V3z"/>
+                  <path d="M8 2.82a1 1 0 0 1 .404-.8l3-2.222A1 1 0 0 1 13 1v2.518A1 1 0 0 1 12.596 4.3l-3 2.222A1 1 0 0 1 8 5.718z"/>
                 </svg>
               </div>
               <h4 style={{ fontFamily: 'var(--font-title)', fontWeight: 700, marginBottom: '0.5rem' }}>BONGOJO Music Lead</h4>
@@ -123,9 +124,10 @@ function About() {
             </div>
 
             <div className="glass-card">
-              <div style={{ fontSize: '2.2rem', color: 'var(--color-secondary)', marginBottom: '1rem', display: 'flex', alignItems: 'center' }}>
-                <svg width="32" height="32" fill="currentColor" viewBox="0 0 16 16">
-                  <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5z"/>
+              <div style={{ fontSize: '2rem', color: 'var(--color-secondary)', marginBottom: '1rem', display: 'flex', alignItems: 'center' }}>
+                <svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1"/>
+                  <path d="M4.5 5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1zm0 2.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1zm0 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1z"/>
                 </svg>
               </div>
               <h4 style={{ fontFamily: 'var(--font-title)', fontWeight: 700, marginBottom: '0.5rem' }}>Entrepreneurship Club</h4>
@@ -135,11 +137,9 @@ function About() {
             </div>
 
             <div className="glass-card">
-              <div style={{ fontSize: '2.2rem', color: 'var(--color-primary)', marginBottom: '1rem', display: 'flex', alignItems: 'center' }}>
-                <svg width="32" height="32" fill="currentColor" viewBox="0 0 16 16">
-                  <path d="M11.5 6.027a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m-1.5 1.5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1m2.5-.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m-1.5 1.5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1m-6.5-3h1v1h-1zm1.5 1.5h-1v1h1zm-1.5 1.5h1v1h-1zm3-1.5h-1v1h1z"/>
-                  <path d="M3.5 6h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1 0-1m0 3h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1 0-1"/>
-                  <path d="M6 3.5c0 1.29-.69 2.42-1.71 3-.1-.58-.4-1.1-.86-1.49.5-.47.82-1.13.82-1.87A2.5 2.5 0 0 0 1.75 1C.78 1 0 1.78 0 2.75A2.75 2.75 0 0 0 2.75 5.5c.34 0 .67-.06.97-.17a4 4 0 0 1 4.57.17H6v-2zm-3 1a.5.5 0 0 1-.5-.5.5.5 0 0 1 .5-.5.5.5 0 0 1 .5.5.5.5 0 0 1-.5.5"/>
+              <div style={{ fontSize: '2rem', color: 'var(--color-primary)', marginBottom: '1rem', display: 'flex', alignItems: 'center' }}>
+                <svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                  <path fillRule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
                 </svg>
               </div>
               <h4 style={{ fontFamily: 'var(--font-title)', fontWeight: 700, marginBottom: '0.5rem' }}>Interests & Lifestyles</h4>

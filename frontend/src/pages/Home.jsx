@@ -21,12 +21,12 @@ function Home() {
         </div>
         
         <h1 className="hero-title">
-          Secure Systems.<br />
-          <span>Scalable AI.</span>
+          Software Engineering.<br />
+          <span>Full-Stack & IoT.</span>
         </h1>
         
         <p className="hero-subtitle">
-          Hi, I'm Rudra Sankar Ghosh Dastidar. A second-year Computer Science undergrad @ VIT-AP, 
+          Hi, I'm Rudra Sankar Ghosh Dastidar. A third-year Computer Science undergrad @ VIT-AP, 
           passionate about full-stack web development, IoT research, and machine learning innovation.
         </p>
         

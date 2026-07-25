@@ -45,7 +45,6 @@ function Projects() {
         <button className={`filter-btn ${filter === 'all' ? 'active' : ''}`} onClick={() => setFilter('all')}>All</button>
         <button className={`filter-btn ${filter === 'fullstack' ? 'active' : ''}`} onClick={() => setFilter('fullstack')}>Full-Stack</button>
         <button className={`filter-btn ${filter === 'ai-iot' ? 'active' : ''}`} onClick={() => setFilter('ai-iot')}>AI & IoT</button>
-        <button className={`filter-btn ${filter === 'clones' ? 'active' : ''}`} onClick={() => setFilter('clones')}>Clones</button>
       </div>
 
       {loading ? (

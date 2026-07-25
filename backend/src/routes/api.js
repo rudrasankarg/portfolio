@@ -56,29 +56,6 @@ const seedProjects = [
     techStack: ["Arduino", "Python", "MATLAB", "React", "TFLite", "Express.js"],
     liveUrl: "https://drive.google.com/file/d/1ZQLLqvIugWzZLVaY16ZUDjCt7QS5AyzN/view"
   },
-  {
-    title: "Amazon Home Page Clone",
-    category: "clones",
-    description: "A detailed replication of the Amazon storefront interface, replicating standard retail grids and layouts.",
-    year: "2025",
-    bulletPoints: [
-      "Styled using modular pure CSS grid structures mirroring 6 interface blocks.",
-      "Utilized vanilla JS transitions for responsive drop-down navigation."
-    ],
-    techStack: ["HTML", "CSS", "JavaScript"],
-    githubUrl: "https://github.com/rudrasankarg"
-  },
-  {
-    title: "YouTube Desktop Interface Clone",
-    category: "clones",
-    description: "Recreation of the YouTube desktop homepage feed with pixel-perfect accuracy.",
-    year: "2025",
-    bulletPoints: [
-      "Recreated sidebar drawers, search bar design, and fluid thumbnail layout.",
-      "Attained 95% visual resemblance using structured HTML5 semantic modules."
-    ],
-    techStack: ["HTML5", "CSS3"],
-    githubUrl: "https://github.com/rudrasankarg"
   }
 ];
 
@@ -90,6 +67,14 @@ router.get('/projects', async (req, res) => {
       return res.json(seedProjects);
     }
     let projects = await Project.find();
+    
+    // Prune legacy clone projects from database if they exist
+    if (projects.some(p => p.category === 'clones')) {
+      console.log('Legacy clones detected in database. Pruning...');
+      await Project.deleteMany({ category: 'clones' });
+      projects = await Project.find();
+    }
+    
     if (projects.length === 0) {
       // Seed initial data if empty
       await Project.insertMany(seedProjects);

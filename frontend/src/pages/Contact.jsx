@@ -73,13 +73,7 @@ function Contact() {
             </div>
           </div>
 
-          <div class="contact-method">
-            <div class="contact-icon"><i class="bi bi-telephone"></i></div>
-            <div class="contact-details">
-              <h4>Phone</h4>
-              <p><a href="tel:+918240197518">+91 8240197518</a></p>
-            </div>
-          </div>
+
 
           <div class="contact-method">
             <div class="contact-icon"><i class="bi bi-linkedin"></i></div>
