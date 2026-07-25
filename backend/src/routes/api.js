@@ -158,7 +158,7 @@ router.post('/contact/send-otp', async (req, res) => {
     }
 
     const mailOptions = {
-      from: process.env.EMAIL_USER,
+      from: '"No-Reply Verification" <' + process.env.EMAIL_USER + '>',
       to: email,
       subject: 'Portfolio Verification Code',
       html: `
@@ -223,7 +223,7 @@ router.post('/contact', async (req, res) => {
     const transporter = getMailTransporter();
     if (transporter) {
       const forwardMailOptions = {
-        from: process.env.EMAIL_USER,
+        from: '"Portfolio Inbox" <' + process.env.EMAIL_USER + '>',
         to: 'rudrasankarg@gmail.com', // Target email
         replyTo: email, // Reply directly to the sender
         subject: `[Portfolio Inbox] Message from ${name}`,
