@@ -14,7 +14,7 @@ function Home() {
 
   return (
     <>
-      <section id="home" className="hero-section fade-in" style={{ position: 'relative', paddingBottom: '6rem' }}>
+      <section id="home" className="hero-section fade-in" style={{ position: 'relative', paddingBottom: '10rem' }}>
         <div className="status-badge">
           <i className="bi bi-circle-fill" style={{ fontSize: '8px', verticalAlign: 'middle', marginRight: '6px', animation: 'blink 1.5s infinite' }}></i>
           Open for Opportunities
