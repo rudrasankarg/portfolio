@@ -24,10 +24,12 @@ app.use((req, res, next) => {
 const apiRoutes = require('./routes/api');
 app.use('/api', apiRoutes);
 
-// Start Server immediately (resilient setup)
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+// Start Server only in non-vercel/non-production environments if needed, or always export
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+}
 
 // Connect to MongoDB in the background
 mongoose.connect(mongoURI)
@@ -39,3 +41,5 @@ mongoose.connect(mongoURI)
     console.error('Database connection error (running with memory fallback):', err.message);
     isMongoConnected = false;
   });
+
+module.exports = app;
