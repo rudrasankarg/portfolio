@@ -194,9 +194,6 @@ function MainLayout() {
             </li>
           </ul>
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="btn-resume" style={{ padding: '0.6rem 1.2rem', borderRadius: '50px', border: '1px solid var(--color-primary)', color: 'var(--color-primary)', textDecoration: 'none', fontSize: '0.9rem', fontWeight: '500', transition: 'var(--transition-fast)' }}>
-              Resume
-            </a>
             <Link to="/contact" className="btn-contact" onClick={() => setNavActive(false)}>Get In Touch</Link>
           </div>
         </nav>
