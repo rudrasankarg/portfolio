@@ -204,7 +204,8 @@ function MainLayout() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<PageWrapper><About /></PageWrapper>} />
-          <Route path="/projects" element={<PageWrapper><Projects /></PageWrapper>} />
+          <Route path="/projects" element={<PageWrapper><Projects showAll={true} /></PageWrapper>} />
+          <Route path="/project" element={<PageWrapper><Projects showAll={true} /></PageWrapper>} />
           <Route path="/experience" element={<PageWrapper><Experience /></PageWrapper>} />
           <Route path="/contact" element={<PageWrapper><Contact /></PageWrapper>} />
           <Route path="*" element={<Home />} />

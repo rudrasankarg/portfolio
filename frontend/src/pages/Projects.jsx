@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function Projects() {
+function Projects({ showAll = false }) {
   const [projects, setProjects] = useState([]);
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [filter, setFilter] = useState('all');
@@ -14,7 +14,10 @@ function Projects() {
         return res.json();
       })
       .then(data => {
-        const activeProjects = data.filter(p => p.category !== 'clones');
+        let activeProjects = data.filter(p => p.category !== 'clones');
+        if (!showAll) {
+          activeProjects = activeProjects.filter(p => !p.title.toLowerCase().includes('nexabank'));
+        }
         setProjects(activeProjects);
         setFilteredProjects(activeProjects);
         setLoading(false);
@@ -23,7 +26,7 @@ function Projects() {
         setError(err.message);
         setLoading(false);
       });
-  }, []);
+  }, [showAll]);
 
   useEffect(() => {
     if (filter === 'all') {
@@ -37,8 +40,12 @@ function Projects() {
     <section id="projects" className="fade-in" style={{ scrollMarginTop: '8rem' }}>
       <div className="section-header">
         <span className="section-number">02. PORTFOLIO</span>
-        <h1 className="section-title">Featured Projects</h1>
-        <p className="section-subtitle">A collection of full-stack systems, research experiments, and interface recreations.</p>
+        <h1 className="section-title">{showAll ? 'All Projects' : 'Featured Projects'}</h1>
+        <p className="section-subtitle">
+          {showAll 
+            ? 'A complete collection of my full-stack systems, research experiments, and interface recreations.' 
+            : 'A collection of full-stack systems, research experiments, and interface recreations.'}
+        </p>
       </div>
 
       {/* Filters */}
