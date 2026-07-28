@@ -1,11 +1,29 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom';
 import Home from './pages/Home';
+import About from './pages/About';
+import Projects from './pages/Projects';
+import Experience from './pages/Experience';
+import Contact from './pages/Contact';
+
+function PageWrapper({ children }) {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  return (
+    <div style={{ paddingTop: '8.5rem', paddingBottom: '6rem', minHeight: '80vh', maxWidth: '1200px', margin: '0 auto', paddingLeft: '2rem', paddingRight: '2rem' }}>
+      {children}
+    </div>
+  );
+}
 
 function MainLayout() {
   const [navActive, setNavActive] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+  const location = useLocation();
+  const navigate = useNavigate();
 
   // Custom Cursor Refs
   const cursorRef = useRef(null);
@@ -146,9 +164,9 @@ function MainLayout() {
 
       {/* Header Navigation */}
       <header className={scrolled ? 'scrolled' : ''}>
-        <a href="#home" onClick={(e) => { e.preventDefault(); scrollToSection('home'); }} className="logo">
+        <Link to="/" onClick={() => scrollToSection('home')} className="logo">
           <span>RUDRA</span> SANKAR
-        </a>
+        </Link>
         
         <button 
           className="nav-toggle" 
@@ -160,22 +178,27 @@ function MainLayout() {
           <span></span>
         </button>
         
-        <nav>
-          <ul className="nav-links">
+        <nav style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+          <ul className="nav-links" style={{ display: 'flex', alignItems: 'center', listStyle: 'none', gap: '2rem', margin: 0, padding: 0 }}>
             <li>
-              <a href="#home" className={activeSection === 'home' ? 'active' : ''} onClick={(e) => { e.preventDefault(); scrollToSection('home'); }}>Home</a>
+              <Link to="/" className={location.pathname === '/' ? 'active' : ''} onClick={() => setNavActive(false)}>Home</Link>
             </li>
             <li>
-              <a href="#about" className={activeSection === 'about' ? 'active' : ''} onClick={(e) => { e.preventDefault(); scrollToSection('about'); }}>About</a>
+              <Link to="/about" className={location.pathname === '/about' ? 'active' : ''} onClick={() => setNavActive(false)}>About</Link>
             </li>
             <li>
-              <a href="#projects" className={activeSection === 'projects' ? 'active' : ''} onClick={(e) => { e.preventDefault(); scrollToSection('projects'); }}>Projects</a>
+              <Link to="/projects" className={location.pathname === '/projects' ? 'active' : ''} onClick={() => setNavActive(false)}>Projects</Link>
             </li>
             <li>
-              <a href="#experience" className={activeSection === 'experience' ? 'active' : ''} onClick={(e) => { e.preventDefault(); scrollToSection('experience'); }}>Experience</a>
+              <Link to="/experience" className={location.pathname === '/experience' ? 'active' : ''} onClick={() => setNavActive(false)}>Experience</Link>
             </li>
           </ul>
-          <a href="#contact" className="btn-contact" onClick={(e) => { e.preventDefault(); scrollToSection('contact'); }}>Get In Touch</a>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="btn-resume" style={{ padding: '0.6rem 1.2rem', borderRadius: '50px', border: '1px solid var(--color-primary)', color: 'var(--color-primary)', textDecoration: 'none', fontSize: '0.9rem', fontWeight: '500', transition: 'var(--transition-fast)' }}>
+              Resume
+            </a>
+            <Link to="/contact" className="btn-contact" onClick={() => setNavActive(false)}>Get In Touch</Link>
+          </div>
         </nav>
       </header>
 
@@ -183,6 +206,10 @@ function MainLayout() {
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/about" element={<PageWrapper><About /></PageWrapper>} />
+          <Route path="/projects" element={<PageWrapper><Projects /></PageWrapper>} />
+          <Route path="/experience" element={<PageWrapper><Experience /></PageWrapper>} />
+          <Route path="/contact" element={<PageWrapper><Contact /></PageWrapper>} />
           <Route path="*" element={<Home />} />
         </Routes>
       </main>
