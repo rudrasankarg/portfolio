@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 
 function Projects({ showAll = false }) {
   const [projects, setProjects] = useState([]);
@@ -153,7 +154,7 @@ function Projects({ showAll = false }) {
       )}
 
       {/* Project Details Modal */}
-      {selectedProject && (
+      {selectedProject && createPortal(
         <div className="project-modal-overlay" onClick={() => setSelectedProject(null)}>
           <div className="project-modal-content" onClick={(e) => e.stopPropagation()}>
             <button className="project-modal-close" onClick={() => setSelectedProject(null)} aria-label="Close modal">
@@ -252,7 +253,8 @@ function Projects({ showAll = false }) {
               </div>
             )}
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </section>
   );
