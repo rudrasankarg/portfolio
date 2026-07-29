@@ -18,18 +18,11 @@
       }
     },
     {
-      "source": "/((?!api|.*\\.[a-z0-9]+$).*)",
+      "source": "/(.*)",
       "destination": {
         "type": "service",
         "service": "frontend",
         "path": "/index.html"
-      }
-    },
-    {
-      "source": "/(.*)",
-      "destination": {
-        "type": "service",
-        "service": "frontend"
       }
     }
   ]
