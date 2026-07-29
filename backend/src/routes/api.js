@@ -90,6 +90,15 @@ router.get('/projects', async (req, res) => {
     }
     
     let projects = await Project.find();
+    
+    // Force sync if no clones are present in database but seedProjects has clones
+    const hasClonesInSeed = seedProjects.some(p => p.category === 'clones');
+    const hasClonesInDb = projects.some(p => p.category === 'clones');
+    if (projects.length > 0 && hasClonesInSeed && !hasClonesInDb) {
+      console.log('Database missing clones category. Clearing and re-seeding...');
+      await Project.deleteMany({});
+      projects = [];
+    }
 
     
     // Sync URL updates if MongoDB has outdated/missing project URLs
