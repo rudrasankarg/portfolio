@@ -39,7 +39,7 @@ const seedProjects = [
   },
   {
     title: "NexaBank – Banking Web Application",
-    category: "clones",
+    category: "fullstack",
     description: "A full-stack banking platform replication featuring secure user dashboard and financial logs.",
     year: "2026",
     bulletPoints: [
@@ -134,7 +134,7 @@ router.get('/projects', async (req, res) => {
       const needsSync = projects.length !== seedProjects.length || projects.some(p => {
         if (p.title.includes("LifeOnLine") && (!p.liveUrl || p.githubUrl.includes("rudrasankarg$"))) return true;
         if (p.title.includes("HackForge") && !p.liveUrl) return true;
-        if (p.title.includes("NexaBank") && (p.category !== "clones" || !p.liveUrl)) return true;
+        if (p.title.includes("NexaBank") && (p.category !== "fullstack" || !p.liveUrl)) return true;
         if (p.title.includes("Heart") && p.liveUrl !== "https://heart-guard-ecs.vercel.app/") return true;
         return false;
       });
