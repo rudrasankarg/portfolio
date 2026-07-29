@@ -112,7 +112,7 @@ function Projects({ showAll = false }) {
             return (
               <div key={project._id} className="project-card-container" onClick={() => showAll && setSelectedProject(project)} style={{ cursor: showAll ? 'pointer' : 'default' }}>
                 <div className="glass-card project-card" style={{ padding: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column', height: '100%' }}>
-                  {imgUrl && (
+                  {showAll && imgUrl && (
                     <div className="project-card-image-container" style={{ width: '100%', height: '200px', overflow: 'hidden', borderBottom: '1px solid var(--border-color)', backgroundColor: '#0b0b14' }}>
                       <img src={imgUrl} alt={project.title} className="project-card-image" style={{ width: '100%', height: '100%', objectFit: 'contain', transition: 'transform 0.5s ease' }} />
                     </div>
