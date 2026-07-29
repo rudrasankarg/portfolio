@@ -373,6 +373,10 @@ main {
   text-decoration: none;
   transition: var(--transition-smooth);
   box-shadow: 0 5px 25px rgba(0, 242, 254, 0.3);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .btn-primary:hover {
@@ -391,6 +395,10 @@ main {
   font-weight: 600;
   text-decoration: none;
   transition: var(--transition-smooth);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .btn-secondary:hover {
