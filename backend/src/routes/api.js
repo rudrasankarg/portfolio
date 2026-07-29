@@ -63,6 +63,34 @@ const seedProjects = [
     techStack: ["Arduino", "Python", "MATLAB", "React", "TFLite", "Express.js"],
     githubUrl: "https://github.com/rudrasankarg/Heart-Abnormality-Detector",
     liveUrl: "https://heart-guard-ecs.vercel.app/"
+  },
+  {
+    title: "YouTube Clone",
+    category: "clones",
+    description: "A full-featured clone of the YouTube web application platform, displaying responsive video feeds and custom streaming panels.",
+    year: "2025",
+    bulletPoints: [
+      "Built interface using React, replicating navigation, styling and grid display.",
+      "Integrated with public feeds, allowing real-time video simulation.",
+      "Optimized load times and layout boundaries with clean state management."
+    ],
+    techStack: ["React", "HTML", "CSS", "JavaScript", "Netlify"],
+    githubUrl: "https://github.com/rudrasankarg/youtube-clone",
+    liveUrl: "https://firstcloneyoutube.netlify.app/"
+  },
+  {
+    title: "Amazon Clone",
+    category: "clones",
+    description: "A comprehensive clone of the Amazon e-commerce platform, implementing checkout features and database logs.",
+    year: "2025",
+    bulletPoints: [
+      "Designed frontend layout with product displays, filter tabs, and responsive checkout page.",
+      "Implemented full cart state system with item adding, subtraction, and total price calculation.",
+      "Deployed the static pages on Vercel with smooth transitions and layout states."
+    ],
+    techStack: ["React", "Next.js", "CSS", "Vercel", "JavaScript"],
+    githubUrl: "https://github.com/rudrasankarg/amazon-clone",
+    liveUrl: "https://amazon-project-f6euv3axk-rudrasankargs-projects.vercel.app/"
   }
 ];
 
@@ -101,9 +129,9 @@ router.get('/projects', async (req, res) => {
     }
 
     
-    // Sync URL updates if MongoDB has outdated/missing project URLs
+    // Sync URL updates or additions if MongoDB is out of sync
     if (projects.length > 0) {
-      const needsSync = projects.some(p => {
+      const needsSync = projects.length !== seedProjects.length || projects.some(p => {
         if (p.title.includes("LifeOnLine") && (!p.liveUrl || p.githubUrl.includes("rudrasankarg$"))) return true;
         if (p.title.includes("HackForge") && !p.liveUrl) return true;
         if (p.title.includes("NexaBank") && (p.category !== "clones" || !p.liveUrl)) return true;
@@ -112,7 +140,7 @@ router.get('/projects', async (req, res) => {
       });
       
       if (needsSync) {
-        console.log('Database project URLs out of sync. Syncing with new links...');
+        console.log('Database projects out of sync. Syncing with seed list...');
         await Project.deleteMany({});
         projects = [];
       }

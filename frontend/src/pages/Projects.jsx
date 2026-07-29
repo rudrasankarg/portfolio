@@ -15,6 +15,8 @@ function Projects({ showAll = false }) {
     if (t.includes('hackforge') || t.includes('hackathon')) return '/images/hackforge.png';
     if (t.includes('nexabank') || t.includes('banking')) return '/images/nexabank.png';
     if (t.includes('heart') || t.includes('ecg')) return '/images/heartguard.png';
+    if (t.includes('youtube')) return '/images/youtube.png';
+    if (t.includes('amazon')) return '/images/amazon.png';
     return '';
   };
 
@@ -31,6 +33,12 @@ function Projects({ showAll = false }) {
     }
     if (t.includes('heart') || t.includes('ecg')) {
       return ['/images/heartguard.png', '/images/heartguard.png', '/images/heartguard.png'];
+    }
+    if (t.includes('youtube')) {
+      return ['/images/youtube.png', '/images/youtube.png', '/images/youtube.png'];
+    }
+    if (t.includes('amazon')) {
+      return ['/images/amazon.png', '/images/amazon.png', '/images/amazon.png'];
     }
     return [];
   };
