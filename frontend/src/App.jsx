@@ -178,8 +178,8 @@ function MainLayout() {
           <span></span>
         </button>
         
-        <nav style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-          <ul className="nav-links" style={{ display: 'flex', alignItems: 'center', listStyle: 'none', gap: '2rem', margin: 0, padding: 0 }}>
+        <nav>
+          <ul className="nav-links">
             <li>
               <Link to="/" className={location.pathname === '/' ? 'active' : ''} onClick={() => setNavActive(false)}>Home</Link>
             </li>
