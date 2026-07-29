@@ -661,6 +661,10 @@ section:not(.hero-section) {
   height: 100%;
 }
 
+.project-card:hover .project-card-image {
+  transform: scale(1.08);
+}
+
 .project-meta {
   display: flex;
   justify-content: space-between;

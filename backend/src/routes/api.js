@@ -39,7 +39,7 @@ const seedProjects = [
   },
   {
     title: "NexaBank – Banking Web Application",
-    category: "fullstack",
+    category: "clones",
     description: "A full-stack banking platform replication featuring secure user dashboard and financial logs.",
     year: "2026",
     bulletPoints: [
@@ -90,20 +90,14 @@ router.get('/projects', async (req, res) => {
     }
     
     let projects = await Project.find();
-    
-    // Prune legacy clone projects if they exist
-    if (projects.some(p => p.category === 'clones')) {
-      console.log('Legacy clones detected in database. Pruning...');
-      await Project.deleteMany({ category: 'clones' });
-      projects = await Project.find();
-    }
+
     
     // Sync URL updates if MongoDB has outdated/missing project URLs
     if (projects.length > 0) {
       const needsSync = projects.some(p => {
         if (p.title.includes("LifeOnLine") && (!p.liveUrl || p.githubUrl.includes("rudrasankarg$"))) return true;
         if (p.title.includes("HackForge") && !p.liveUrl) return true;
-        if (p.title.includes("NexaBank") && !p.liveUrl) return true;
+        if (p.title.includes("NexaBank") && (p.category !== "clones" || !p.liveUrl)) return true;
         if (p.title.includes("Heart") && p.liveUrl !== "https://heart-guard-ecs.vercel.app/") return true;
         return false;
       });
