@@ -110,7 +110,7 @@ function Projects({ showAll = false }) {
           {filteredProjects.map(project => {
             const imgUrl = getProjectImage(project.title);
             return (
-              <div key={project._id} className="project-card-container" onClick={() => setSelectedProject(project)} style={{ cursor: 'pointer' }}>
+              <div key={project._id} className="project-card-container" onClick={() => showAll && setSelectedProject(project)} style={{ cursor: showAll ? 'pointer' : 'default' }}>
                 <div className="glass-card project-card" style={{ padding: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column', height: '100%' }}>
                   {imgUrl && (
                     <div className="project-card-image-container" style={{ width: '100%', height: '200px', overflow: 'hidden', borderBottom: '1px solid var(--border-color)' }}>
