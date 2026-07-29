@@ -8,6 +8,7 @@ function Projects({ showAll = false }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
+  const [enlargedImage, setEnlargedImage] = useState(null);
 
   const getProjectImage = (title) => {
     const t = title.toLowerCase();
@@ -23,22 +24,22 @@ function Projects({ showAll = false }) {
   const getProjectScreenshots = (title) => {
     const t = title.toLowerCase();
     if (t.includes('lifeonline') || t.includes('healthcare')) {
-      return ['/images/lifeonline.png', '/images/lifeonline.png', '/images/lifeonline.png'];
+      return ['/images/lifeonline.png', '/images/lifeonline-1.png', '/images/lifeonline-2.png'];
     }
     if (t.includes('hackforge') || t.includes('hackathon')) {
-      return ['/images/hackforge.png', '/images/hackforge.png', '/images/hackforge.png'];
+      return ['/images/hackforge.png', '/images/hackforge-1.png', '/images/hackforge-2.png'];
     }
     if (t.includes('nexabank') || t.includes('banking')) {
-      return ['/images/nexabank.png', '/images/nexabank.png', '/images/nexabank.png'];
+      return ['/images/nexabank.png', '/images/nexabank-1.png', '/images/nexabank-2.png'];
     }
     if (t.includes('heart') || t.includes('ecg')) {
-      return ['/images/heartguard.png', '/images/heartguard.png', '/images/heartguard.png'];
+      return ['/images/heartguard.png', '/images/heartguard-1.png', '/images/heartguard-2.png'];
     }
     if (t.includes('youtube')) {
-      return ['/images/youtube.png', '/images/youtube.png', '/images/youtube.png'];
+      return ['/images/youtube.png'];
     }
     if (t.includes('amazon')) {
-      return ['/images/amazon.png', '/images/amazon.png', '/images/amazon.png'];
+      return ['/images/amazon.png', '/images/amazon-1.png', '/images/amazon-2.png'];
     }
     return [];
   };
@@ -253,13 +254,28 @@ function Projects({ showAll = false }) {
                 </h4>
                 <div className="project-modal-gallery">
                   {getProjectScreenshots(selectedProject.title).map((scr, idx) => (
-                    <div key={idx} className="project-modal-gallery-item">
+                    <div key={idx} className="project-modal-gallery-item" onClick={() => setEnlargedImage(scr)} style={{ cursor: 'zoom-in' }}>
                       <img src={scr} alt={`Screenshot ${idx + 1}`} />
                     </div>
                   ))}
                 </div>
               </div>
             )}
+          </div>
+        </div>,
+        document.body
+      )}
+
+      {/* Enlarged Lightbox View */}
+      {enlargedImage && createPortal(
+        <div className="lightbox-overlay" onClick={() => setEnlargedImage(null)}>
+          <button className="lightbox-close" onClick={() => setEnlargedImage(null)} aria-label="Close image">
+            <svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+            </svg>
+          </button>
+          <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
+            <img src={enlargedImage} alt="Enlarged screenshot" />
           </div>
         </div>,
         document.body
